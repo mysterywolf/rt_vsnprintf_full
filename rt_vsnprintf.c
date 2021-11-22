@@ -24,8 +24,8 @@
  *
  * @return The number of characters actually written to buffer.
  */
-rt_int32_t rt_vsnprintf(char *buf, rt_size_t size, const char *fmt, va_list args)
-{
-
-    return 0;
-}
+//rt_int32_t rt_vsnprintf(char *buf, rt_size_t size, const char *fmt, va_list args)
+//{
+//
+//    return 0;
+//}
