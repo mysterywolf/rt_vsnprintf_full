@@ -1,5 +1,4 @@
 from building import *
-Import('rtconfig')
 
 src   = ['rt_vsnprintf.c']
 CPPDEFINES = []
