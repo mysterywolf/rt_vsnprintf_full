@@ -5,7 +5,7 @@
  *
  * Change Logs:
  * Date           Author       Notes
- * 2021-11-27     Meco Man     porting for rt_vsnprintf as the full functional version
+ * 2021-11-27     Meco Man     porting for rt_vsnprintf as the fully functional version
  */
 
 /**
