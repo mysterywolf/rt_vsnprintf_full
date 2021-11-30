@@ -19,3 +19,28 @@ GCC下占用8.6KB, Keil下占用8KB。远小于开启标准C库的ROM占用。
 
 ## 维护
 [Meco Man](https://github.com/mysterywolf)
+
+## 使用说明
+- 使用 `RT-Thread Studio` 打开 `RT-Thread Settings`, 点击添加软件包，输入关键字 `printf`, 添加 `rt_vsnprintf_full` 软件包，保存
+
+   ![image-20211129231948911.png](https://oss-club.rt-thread.org/uploads/20211129/6888bb835c8cb8c518a9b32549c55d8d.png.webp)
+
+
+- 软件包目录下多出了一个  `rt_vsnprintf_full-latest` 包
+
+  ![image-20211129232321829.png](https://oss-club.rt-thread.org/uploads/20211129/8f9840669e643956b8ade4f8e8304c97.png)
+
+
+- 打开 rt_vsnprintf.c，发现其中也实现了 rt_vsnprintf
+
+  ```c
+  rt_int32_t rt_vsnprintf(char *buf, rt_size_t size, const char *fmt, va_list args)
+  {
+      return __vsnprintf(out_buffer, buf, size, fmt, args);
+  }
+  ```
+
+- 注释  kservice.c 中的  rt_vsnprintf
+
+- 重新编译并运行 `rt_kprintf ` 和 `LOG_I`, 浮点数打印正常
+  ![image.png](https://oss-club.rt-thread.org/uploads/20211130/08dc5bbbde0a900c1dcc0118da827197.png)
