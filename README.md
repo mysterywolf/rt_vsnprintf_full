@@ -38,7 +38,7 @@ GCC下占用8.6KB, Keil下占用8KB。远小于开启标准C库的ROM占用。
   }
   ```
 
-- 注释  kservice.c 中的  rt_vsnprintf **(只针对4.1.0版本以下)**
+- 注释掉 kservice.c 中的  rt_vsnprintf **(只针对4.1.0版本以下)**
 
 - 重新编译并运行 `rt_kprintf ` 和 `LOG_I`, 浮点数打印正常
   ![3](figures/3.png)
