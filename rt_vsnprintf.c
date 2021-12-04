@@ -1077,7 +1077,11 @@ static int __vsnprintf(out_fct_type out, char* buffer, const size_t maxlen, cons
  *
  * @return The number of characters actually written to buffer.
  */
+#if (RTTHREAD_VERSION >= 40100) || (RTTHREAD_VERSION < 40000 && RTTHREAD_VERSION >= 30106)
+int rt_vsnprintf(char *buf, rt_size_t size, const char *fmt, va_list args)
+#else
 rt_int32_t rt_vsnprintf(char *buf, rt_size_t size, const char *fmt, va_list args)
+#endif
 {
     return __vsnprintf(out_buffer, buf, size, fmt, args);
 }
