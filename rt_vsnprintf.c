@@ -50,7 +50,7 @@
 #include <stdint.h>
 #include <stdarg.h>
 #include <stddef.h>
-#include <rtdef.h>
+#include <rtthread.h>
 
 // 'ntoa' conversion buffer size, this must be big enough to hold one converted
 // numeric number including padded zeros (dynamically created on stack)
@@ -1083,10 +1083,15 @@ int rt_vsnprintf(char *buf, rt_size_t size, const char *fmt, va_list args)
 rt_int32_t rt_vsnprintf(char *buf, rt_size_t size, const char *fmt, va_list args)
 #endif
 {
-    return __vsnprintf(out_buffer, buf, size, fmt, args);
+  return __vsnprintf(out_buffer, buf, size, fmt, args);
 }
 
-int vsnprintf (char * s, size_t n, const char * format, va_list arg)
+int vsnprintf(char * s, size_t n, const char * format, va_list arg)
 {
-  return __vsnprintf(out_buffer, s, n, format, arg);
+  return rt_vsnprintf(s, n, format, arg);
+}
+
+int vsprintf(char * s, const char * format, va_list arg)
+{
+  return rt_vsprintf(s, format, arg);
 }
