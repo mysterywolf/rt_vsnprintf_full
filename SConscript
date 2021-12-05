@@ -10,5 +10,5 @@ if GetDepend('RT_VSNPRINTF_FULL_REPLACING_SNPRINTF'):
 if GetDepend('RT_VSNPRINTF_FULL_REPLACING_PRINTF'):
     CPPDEFINES += ['printf=rt_kprintf']
 
-group = DefineGroup('Kernel', src, depend = ['PKG_USING_RT_VSNPRINTF_FULL'], CPPDEFINES = CPPDEFINES)
+group = DefineGroup('rt_kprintf', src, depend = ['PKG_USING_RT_VSNPRINTF_FULL'], CPPDEFINES = CPPDEFINES)
 Return('group')
