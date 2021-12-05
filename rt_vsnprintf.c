@@ -1085,3 +1085,8 @@ rt_int32_t rt_vsnprintf(char *buf, rt_size_t size, const char *fmt, va_list args
 {
     return __vsnprintf(out_buffer, buf, size, fmt, args);
 }
+
+int vsnprintf (char * s, size_t n, const char * format, va_list arg)
+{
+  return __vsnprintf(out_buffer, s, n, format, arg);
+}
