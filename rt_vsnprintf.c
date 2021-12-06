@@ -1086,12 +1086,16 @@ rt_int32_t rt_vsnprintf(char *buf, rt_size_t size, const char *fmt, va_list args
   return __vsnprintf(out_buffer, buf, size, fmt, args);
 }
 
+#ifdef RT_VSNPRINTF_FULL_REPLACING_VSNPRINTF
 int vsnprintf(char * s, size_t n, const char * format, va_list arg)
 {
   return rt_vsnprintf(s, n, format, arg);
 }
+#endif
 
+#ifdef RT_VSNPRINTF_FULL_REPLACING_VSPRINTF
 int vsprintf(char * s, const char * format, va_list arg)
 {
   return rt_vsprintf(s, format, arg);
 }
+#endif
