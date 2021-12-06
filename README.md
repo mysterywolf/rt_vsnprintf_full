@@ -17,7 +17,15 @@ printf("hello world\n");
 ## ROM占用
 GCC下占用8.6KB, Keil下占用8KB。远小于开启标准C库的ROM占用。
 
-## 使用说明
+## 如何添加该软件包
+
+```
+RT-Thread online packages
+    system packages --->
+        [*] rt_kprintf: enhanced rt_kprintf packages
+            [*] rt_vsnprintf_full: fully functional version of rt_vsnprintf --->
+                    Version (latest)  --->
+```
 
 - 使用 `RT-Thread Studio` 打开 `RT-Thread Settings`, 点击添加软件包，输入关键字 `printf`, 添加 `rt_vsnprintf_full` 软件包，保存
 
