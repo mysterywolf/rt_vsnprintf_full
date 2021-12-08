@@ -22,7 +22,7 @@ GCC下占用8.6KB, Keil下占用8KB。远小于开启标准C库的ROM占用。
 ```
 RT-Thread online packages
     system packages --->
-        [*] rt_kprintf: enhanced rt_kprintf packages
+        enhanced kernel services --->
             [*] rt_vsnprintf_full: fully functional version of rt_vsnprintf --->
                     Version (latest)  --->
 ```
