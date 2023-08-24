@@ -1333,12 +1333,6 @@ static int vsnprintf_impl(output_gadget_t* output, const char* format, va_list a
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static inline int vsnprintf_(char* s, size_t n, const char* format, va_list arg)
-{
-  output_gadget_t gadget = buffer_gadget(s, n);
-  return vsnprintf_impl(&gadget, format, arg);
-}
-
 /**
  * This function will fill a formatted string to buffer.
  *
@@ -1358,7 +1352,8 @@ int rt_vsnprintf(char *buf, rt_size_t size, const char *fmt, va_list args)
 rt_int32_t rt_vsnprintf(char *buf, rt_size_t size, const char *fmt, va_list args)
 #endif
 {
-  return vsnprintf_(buf, size, fmt, args);
+  output_gadget_t gadget = buffer_gadget(buf, size);
+  return vsnprintf_impl(&gadget, fmt, args);
 }
 
 #ifdef RT_VSNPRINTF_FULL_REPLACING_VSNPRINTF
