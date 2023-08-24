@@ -57,77 +57,77 @@
 
 // 'ntoa' conversion buffer size, this must be big enough to hold one converted
 // numeric number including padded zeros (dynamically created on stack)
-#ifndef PRINTF_INTEGER_BUFFER_SIZE
-#define PRINTF_INTEGER_BUFFER_SIZE    32
-#endif
+// #ifndef PKG_VSNPRINTF_INTEGER_BUFFER_SIZE
+// #define PKG_VSNPRINTF_INTEGER_BUFFER_SIZE    32
+// #endif
 
 // size of the fixed (on-stack) buffer for printing individual decimal numbers.
 // this must be big enough to hold one converted floating-point value including
 // padded zeros.
-#ifndef PRINTF_DECIMAL_BUFFER_SIZE
-#define PRINTF_DECIMAL_BUFFER_SIZE    32
-#endif
+// #ifndef PKG_VSNPRINTF_DECIMAL_BUFFER_SIZE
+// #define PKG_VSNPRINTF_DECIMAL_BUFFER_SIZE    32
+// #endif
 
 // Support for the decimal notation floating point conversion specifiers (%f, %F)
-#ifndef PRINTF_SUPPORT_DECIMAL_SPECIFIERS
-#define PRINTF_SUPPORT_DECIMAL_SPECIFIERS 1
-#endif
+// #ifndef PKG_VSNPRINTF_SUPPORT_DECIMAL_SPECIFIERS
+// #define PKG_VSNPRINTF_SUPPORT_DECIMAL_SPECIFIERS
+// #endif
 
 // Support for the exponential notation floating point conversion specifiers (%e, %g, %E, %G)
-#ifndef PRINTF_SUPPORT_EXPONENTIAL_SPECIFIERS
-#define PRINTF_SUPPORT_EXPONENTIAL_SPECIFIERS 1
-#endif
+// #ifndef PKG_VSNPRINTF_SUPPORT_EXPONENTIAL_SPECIFIERS
+// #define PKG_VSNPRINTF_SUPPORT_EXPONENTIAL_SPECIFIERS
+// #endif
 
 // Support for the length write-back specifier (%n)
-#ifndef PRINTF_SUPPORT_WRITEBACK_SPECIFIER
-#define PRINTF_SUPPORT_WRITEBACK_SPECIFIER 1
-#endif
+// #ifndef PKG_VSNPRINTF_SUPPORT_WRITEBACK_SPECIFIER
+// #define PKG_VSNPRINTF_SUPPORT_WRITEBACK_SPECIFIER
+// #endif
 
 // Default precision for the floating point conversion specifiers (the C standard sets this at 6)
-#ifndef PRINTF_DEFAULT_FLOAT_PRECISION
-#define PRINTF_DEFAULT_FLOAT_PRECISION  6
-#endif
+// #ifndef PKG_VSNPRINTF_DEFAULT_FLOAT_PRECISION
+// #define PKG_VSNPRINTF_DEFAULT_FLOAT_PRECISION  6
+// #endif
 
 // According to the C languages standard, printf() and related functions must be able to print any
 // integral number in floating-point notation, regardless of length, when using the %f specifier -
 // possibly hundreds of characters, potentially overflowing your buffers. In this implementation,
 // all values beyond this threshold are switched to exponential notation.
-#ifndef PRINTF_MAX_INTEGRAL_DIGITS_FOR_DECIMAL
-#define PRINTF_MAX_INTEGRAL_DIGITS_FOR_DECIMAL 9
-#endif
+// #ifndef PKG_VSNPRINTF_MAX_INTEGRAL_DIGITS_FOR_DECIMAL
+// #define PKG_VSNPRINTF_MAX_INTEGRAL_DIGITS_FOR_DECIMAL 9
+// #endif
 
 // Support for the long long integral types (with the ll, z and t length modifiers for specifiers
 // %d,%i,%o,%x,%X,%u, and with the %p specifier). Note: 'L' (long double) is not supported.
-#ifndef PRINTF_SUPPORT_LONG_LONG
-#define PRINTF_SUPPORT_LONG_LONG 1
-#endif
+// #ifndef PKG_VSNPRINTF_SUPPORT_LONG_LONG
+// #define PKG_VSNPRINTF_SUPPORT_LONG_LONG
+// #endif
 
 // The number of terms in a Taylor series expansion of log_10(x) to
 // use for approximation - including the power-zero term (i.e. the
 // value at the point of expansion).
-#ifndef PRINTF_LOG10_TAYLOR_TERMS
-#define PRINTF_LOG10_TAYLOR_TERMS 4
-#endif
+// #ifndef PKG_VSNPRINTF_LOG10_TAYLOR_TERMS
+// #define PKG_VSNPRINTF_LOG10_TAYLOR_TERMS 4
+// #endif
 
-#if PRINTF_LOG10_TAYLOR_TERMS <= 1
+#if PKG_VSNPRINTF_LOG10_TAYLOR_TERMS <= 1
 #error "At least one non-constant Taylor expansion is necessary for the log10() calculation"
 #endif
 
 // Be extra-safe, and don't assume format specifiers are completed correctly
 // before the format string end.
-#ifndef PRINTF_CHECK_FOR_NUL_IN_FORMAT_SPECIFIER
-#define PRINTF_CHECK_FOR_NUL_IN_FORMAT_SPECIFIER 1
-#endif
+// #ifndef PKG_VSNPRINTF_CHECK_FOR_NUL_IN_FORMAT_SPECIFIER
+// #define PKG_VSNPRINTF_CHECK_FOR_NUL_IN_FORMAT_SPECIFIER
+// #endif
 
-#define PRINTF_PREFER_DECIMAL     false
-#define PRINTF_PREFER_EXPONENTIAL true
+#define PKG_VSNPRINTF_PREFER_DECIMAL     false
+#define PKG_VSNPRINTF_PREFER_EXPONENTIAL true
 
 ///////////////////////////////////////////////////////////////////////////////
 
 // The following will convert the number-of-digits into an exponential-notation literal
 #define PRINTF_CONCATENATE(s1, s2) s1##s2
 #define PRINTF_EXPAND_THEN_CONCATENATE(s1, s2) PRINTF_CONCATENATE(s1, s2)
-#define PRINTF_FLOAT_NOTATION_THRESHOLD PRINTF_EXPAND_THEN_CONCATENATE(1e,PRINTF_MAX_INTEGRAL_DIGITS_FOR_DECIMAL)
+#define PRINTF_FLOAT_NOTATION_THRESHOLD PRINTF_EXPAND_THEN_CONCATENATE(1e,PKG_VSNPRINTF_MAX_INTEGRAL_DIGITS_FOR_DECIMAL)
 
 // internal flag definitions
 #define FLAGS_ZEROPAD   (1U <<  0U)
@@ -139,7 +139,7 @@
 #define FLAGS_CHAR      (1U <<  6U)
 #define FLAGS_SHORT     (1U <<  7U)
 #define FLAGS_INT       (1U <<  8U)
-  // Only used with PRINTF_SUPPORT_MSVC_STYLE_INTEGER_SPECIFIERS
+  // Only used with PKG_VSNPRINTF_SUPPORT_MSVC_STYLE_INTEGER_SPECIFIERS
 #define FLAGS_LONG      (1U <<  9U)
 #define FLAGS_LONG_LONG (1U << 10U)
 #define FLAGS_PRECISION (1U << 11U)
@@ -147,9 +147,9 @@
 #define FLAGS_POINTER   (1U << 13U)
   // Note: Similar, but not identical, effect as FLAGS_HASH
 #define FLAGS_SIGNED    (1U << 14U)
-  // Only used with PRINTF_SUPPORT_MSVC_STYLE_INTEGER_SPECIFIERS
+  // Only used with PKG_VSNPRINTF_SUPPORT_MSVC_STYLE_INTEGER_SPECIFIERS
 
-#ifdef PRINTF_SUPPORT_MSVC_STYLE_INTEGER_SPECIFIERS
+#ifdef PKG_VSNPRINTF_SUPPORT_MSVC_STYLE_INTEGER_SPECIFIERS
 
 #define FLAGS_INT8 FLAGS_CHAR
 
@@ -190,7 +190,7 @@
 #error "No basic integer type has a size of 64 bits exactly"
 #endif
 
-#endif // PRINTF_SUPPORT_MSVC_STYLE_INTEGER_SPECIFIERS
+#endif // PKG_VSNPRINTF_SUPPORT_MSVC_STYLE_INTEGER_SPECIFIERS
 
 
 typedef unsigned int printf_flags_t;
@@ -202,7 +202,7 @@ typedef unsigned int printf_flags_t;
 
 typedef uint8_t numeric_base_t;
 
-#if PRINTF_SUPPORT_LONG_LONG
+#ifdef PKG_VSNPRINTF_SUPPORT_LONG_LONG
 typedef unsigned long long printf_unsigned_value_t;
 typedef long long          printf_signed_value_t;
 #else
@@ -221,7 +221,7 @@ typedef unsigned int printf_size_t;
   // since INT_MAX is the maximum return value, which excludes the
   // trailing '\0'.
 
-#if (PRINTF_SUPPORT_DECIMAL_SPECIFIERS || PRINTF_SUPPORT_EXPONENTIAL_SPECIFIERS)
+#if defined(PKG_VSNPRINTF_SUPPORT_DECIMAL_SPECIFIERS) || defined(PKG_VSNPRINTF_SUPPORT_EXPONENTIAL_SPECIFIERS)
 #include <float.h>
 #if FLT_RADIX != 2
 #error "Non-binary-radix floating-point types are unsupported."
@@ -283,7 +283,7 @@ static inline int get_exp2(double_with_bit_access x)
 }
 #define PRINTF_ABS(_x) ( (_x) > 0 ? (_x) : -(_x) )
 
-#endif // (PRINTF_SUPPORT_DECIMAL_SPECIFIERS || PRINTF_SUPPORT_EXPONENTIAL_SPECIFIERS)
+#endif // (PKG_VSNPRINTF_SUPPORT_DECIMAL_SPECIFIERS || PKG_VSNPRINTF_SUPPORT_EXPONENTIAL_SPECIFIERS)
 
 // Note in particular the behavior here on LONG_MIN or LLONG_MIN; it is valid
 // and well-defined, but if you're not careful you can easily trigger undefined
@@ -434,12 +434,12 @@ static void print_integer_finalization(output_gadget_t* output, char* buf, print
       if (width && (flags & FLAGS_ZEROPAD) && (negative || (flags & (FLAGS_PLUS | FLAGS_SPACE)))) {
         width--;
       }
-      while ((flags & FLAGS_ZEROPAD) && (len < width) && (len < PRINTF_INTEGER_BUFFER_SIZE)) {
+      while ((flags & FLAGS_ZEROPAD) && (len < width) && (len < PKG_VSNPRINTF_INTEGER_BUFFER_SIZE)) {
         buf[len++] = '0';
       }
     }
 
-    while ((len < precision) && (len < PRINTF_INTEGER_BUFFER_SIZE)) {
+    while ((len < precision) && (len < PKG_VSNPRINTF_INTEGER_BUFFER_SIZE)) {
       buf[len++] = '0';
     }
 
@@ -461,21 +461,21 @@ static void print_integer_finalization(output_gadget_t* output, char* buf, print
         len--; // ... and an extra one for 0x or 0b
       }
     }
-    if ((base == BASE_HEX) && !(flags & FLAGS_UPPERCASE) && (len < PRINTF_INTEGER_BUFFER_SIZE)) {
+    if ((base == BASE_HEX) && !(flags & FLAGS_UPPERCASE) && (len < PKG_VSNPRINTF_INTEGER_BUFFER_SIZE)) {
       buf[len++] = 'x';
     }
-    else if ((base == BASE_HEX) && (flags & FLAGS_UPPERCASE) && (len < PRINTF_INTEGER_BUFFER_SIZE)) {
+    else if ((base == BASE_HEX) && (flags & FLAGS_UPPERCASE) && (len < PKG_VSNPRINTF_INTEGER_BUFFER_SIZE)) {
       buf[len++] = 'X';
     }
-    else if ((base == BASE_BINARY) && (len < PRINTF_INTEGER_BUFFER_SIZE)) {
+    else if ((base == BASE_BINARY) && (len < PKG_VSNPRINTF_INTEGER_BUFFER_SIZE)) {
       buf[len++] = 'b';
     }
-    if (len < PRINTF_INTEGER_BUFFER_SIZE) {
+    if (len < PKG_VSNPRINTF_INTEGER_BUFFER_SIZE) {
       buf[len++] = '0';
     }
   }
 
-  if (len < PRINTF_INTEGER_BUFFER_SIZE) {
+  if (len < PKG_VSNPRINTF_INTEGER_BUFFER_SIZE) {
     if (negative) {
       buf[len++] = '-';
     }
@@ -493,7 +493,7 @@ static void print_integer_finalization(output_gadget_t* output, char* buf, print
 // An internal itoa-like function
 static void print_integer(output_gadget_t* output, printf_unsigned_value_t value, bool negative, numeric_base_t base, printf_size_t precision, printf_size_t width, printf_flags_t flags)
 {
-  char buf[PRINTF_INTEGER_BUFFER_SIZE];
+  char buf[PKG_VSNPRINTF_INTEGER_BUFFER_SIZE];
   printf_size_t len = 0U;
 
   if (!value) {
@@ -515,13 +515,13 @@ static void print_integer(output_gadget_t* output, printf_unsigned_value_t value
       const char digit = (char)(value % base);
       buf[len++] = (char)(digit < 10 ? '0' + digit : (flags & FLAGS_UPPERCASE ? 'A' : 'a') + digit - 10);
       value /= base;
-    } while (value && (len < PRINTF_INTEGER_BUFFER_SIZE));
+    } while (value && (len < PKG_VSNPRINTF_INTEGER_BUFFER_SIZE));
   }
 
   print_integer_finalization(output, buf, len, negative, base, precision, width, flags);
 }
 
-#if (PRINTF_SUPPORT_DECIMAL_SPECIFIERS || PRINTF_SUPPORT_EXPONENTIAL_SPECIFIERS)
+#if defined(PKG_VSNPRINTF_SUPPORT_DECIMAL_SPECIFIERS) || defined(PKG_VSNPRINTF_SUPPORT_EXPONENTIAL_SPECIFIERS)
 
 // Stores a fixed-precision representation of a double relative
 // to a fixed precision (which cannot be determined by examining this structure)
@@ -581,7 +581,7 @@ static struct double_components get_components(double number, printf_size_t prec
   return number_;
 }
 
-#if PRINTF_SUPPORT_EXPONENTIAL_SPECIFIERS
+#ifdef PKG_VSNPRINTF_SUPPORT_EXPONENTIAL_SPECIFIERS
 struct scaling_factor {
   double raw_factor;
   bool multiply; // if true, need to multiply by raw_factor; otherwise need to divide by it
@@ -668,7 +668,7 @@ static struct double_components get_normalized_components(bool negative, printf_
   }
   return components;
 }
-#endif // PRINTF_SUPPORT_EXPONENTIAL_SPECIFIERS
+#endif // PKG_VSNPRINTF_SUPPORT_EXPONENTIAL_SPECIFIERS
 
 static void print_broken_up_decimal(
   struct double_components number_, output_gadget_t* output, printf_size_t precision,
@@ -695,7 +695,7 @@ static void print_broken_up_decimal(
     }
 
     if (number_.fractional > 0 || !(flags & FLAGS_ADAPT_EXP) || (flags & FLAGS_HASH) ) {
-      while (len < PRINTF_DECIMAL_BUFFER_SIZE) {
+      while (len < PKG_VSNPRINTF_DECIMAL_BUFFER_SIZE) {
         --count;
         buf[len++] = (char)('0' + number_.fractional % 10U);
         if (!(number_.fractional /= 10U)) {
@@ -703,24 +703,24 @@ static void print_broken_up_decimal(
         }
       }
       // add extra 0s
-      while ((len < PRINTF_DECIMAL_BUFFER_SIZE) && (count > 0U)) {
+      while ((len < PKG_VSNPRINTF_DECIMAL_BUFFER_SIZE) && (count > 0U)) {
         buf[len++] = '0';
         --count;
       }
-      if (len < PRINTF_DECIMAL_BUFFER_SIZE) {
+      if (len < PKG_VSNPRINTF_DECIMAL_BUFFER_SIZE) {
         buf[len++] = '.';
       }
     }
   }
   else {
-    if ((flags & FLAGS_HASH) && (len < PRINTF_DECIMAL_BUFFER_SIZE)) {
+    if ((flags & FLAGS_HASH) && (len < PKG_VSNPRINTF_DECIMAL_BUFFER_SIZE)) {
       buf[len++] = '.';
     }
   }
 
   // Write the integer part of the number (it comes after the fractional
   // since the character order is reversed)
-  while (len < PRINTF_DECIMAL_BUFFER_SIZE) {
+  while (len < PKG_VSNPRINTF_DECIMAL_BUFFER_SIZE) {
     buf[len++] = (char)('0' + (number_.integral % 10));
     if (!(number_.integral /= 10)) {
       break;
@@ -732,12 +732,12 @@ static void print_broken_up_decimal(
     if (width && (number_.is_negative || (flags & (FLAGS_PLUS | FLAGS_SPACE)))) {
       width--;
     }
-    while ((len < width) && (len < PRINTF_DECIMAL_BUFFER_SIZE)) {
+    while ((len < width) && (len < PKG_VSNPRINTF_DECIMAL_BUFFER_SIZE)) {
       buf[len++] = '0';
     }
   }
 
-  if (len < PRINTF_DECIMAL_BUFFER_SIZE) {
+  if (len < PKG_VSNPRINTF_DECIMAL_BUFFER_SIZE) {
     if (number_.is_negative) {
       buf[len++] = '-';
     }
@@ -759,7 +759,7 @@ static void print_decimal_number(output_gadget_t* output, double number, printf_
   print_broken_up_decimal(value_, output, precision, width, flags, buf, len);
 }
 
-#if PRINTF_SUPPORT_EXPONENTIAL_SPECIFIERS
+#ifdef PKG_VSNPRINTF_SUPPORT_EXPONENTIAL_SPECIFIERS
 
 // A floor function - but one which only works for numbers whose
 // floor value is representable by an int.
@@ -793,9 +793,9 @@ static double log10_of_positive(double positive_number)
     // Taylor expansion around 1.5:
     0.1760912590556812420           // Expansion term 0: ln(1.5)            / ln(10)
     + z     * 0.2895296546021678851 // Expansion term 1: (M - 1.5)   * 2/3  / ln(10)
-#if PRINTF_LOG10_TAYLOR_TERMS > 2
+#if PKG_VSNPRINTF_LOG10_TAYLOR_TERMS > 2
     - z*z   * 0.0965098848673892950 // Expansion term 2: (M - 1.5)^2 * 2/9  / ln(10)
-#if PRINTF_LOG10_TAYLOR_TERMS > 3
+#if PKG_VSNPRINTF_LOG10_TAYLOR_TERMS > 3
     + z*z*z * 0.0428932821632841311 // Expansion term 2: (M - 1.5)^3 * 8/81 / ln(10)
 #endif
 #endif
@@ -935,11 +935,11 @@ static void print_exponential_number(output_gadget_t* output, double number, pri
     }
   }
 }
-#endif  // PRINTF_SUPPORT_EXPONENTIAL_SPECIFIERS
+#endif  // PKG_VSNPRINTF_SUPPORT_EXPONENTIAL_SPECIFIERS
 
 static void print_floating_point(output_gadget_t* output, double value, printf_size_t precision, printf_size_t width, printf_flags_t flags, bool prefer_exponential)
 {
-  char buf[PRINTF_DECIMAL_BUFFER_SIZE];
+  char buf[PKG_VSNPRINTF_DECIMAL_BUFFER_SIZE];
   printf_size_t len = 0U;
 
   // test for special values
@@ -961,7 +961,7 @@ static void print_floating_point(output_gadget_t* output, double value, printf_s
     // The required behavior of standard printf is to print _every_ integral-part digit -- which could mean
     // printing hundreds of characters, overflowing any fixed internal buffer and necessitating a more complicated
     // implementation.
-#if PRINTF_SUPPORT_EXPONENTIAL_SPECIFIERS
+#ifdef PKG_VSNPRINTF_SUPPORT_EXPONENTIAL_SPECIFIERS
     print_exponential_number(output, value, precision, width, flags, buf, len);
 #endif
     return;
@@ -969,16 +969,16 @@ static void print_floating_point(output_gadget_t* output, double value, printf_s
 
   // set default precision, if not set explicitly
   if (!(flags & FLAGS_PRECISION)) {
-    precision = PRINTF_DEFAULT_FLOAT_PRECISION;
+    precision = PKG_VSNPRINTF_DEFAULT_FLOAT_PRECISION;
   }
 
   // limit precision so that our integer holding the fractional part does not overflow
-  while ((len < PRINTF_DECIMAL_BUFFER_SIZE) && (precision > PRINTF_MAX_SUPPORTED_PRECISION)) {
+  while ((len < PKG_VSNPRINTF_DECIMAL_BUFFER_SIZE) && (precision > PRINTF_MAX_SUPPORTED_PRECISION)) {
     buf[len++] = '0'; // This respects the precision in terms of result length only
     precision--;
   }
 
-#if PRINTF_SUPPORT_EXPONENTIAL_SPECIFIERS
+#ifdef PKG_VSNPRINTF_SUPPORT_EXPONENTIAL_SPECIFIERS
   if (prefer_exponential)
     print_exponential_number(output, value, precision, width, flags, buf, len);
   else
@@ -986,7 +986,7 @@ static void print_floating_point(output_gadget_t* output, double value, printf_s
     print_decimal_number(output, value, precision, width, flags, buf, len);
 }
 
-#endif  // (PRINTF_SUPPORT_DECIMAL_SPECIFIERS || PRINTF_SUPPORT_EXPONENTIAL_SPECIFIERS)
+#endif  // (PKG_VSNPRINTF_SUPPORT_DECIMAL_SPECIFIERS || PKG_VSNPRINTF_SUPPORT_EXPONENTIAL_SPECIFIERS)
 
 // Advances the format pointer past the flags, and returns the parsed flags
 // due to the characters passed
@@ -1007,7 +1007,7 @@ static printf_flags_t parse_flags(const char** format)
 
 static inline void format_string_loop(output_gadget_t* output, const char* format, va_list args)
 {
-#if PRINTF_CHECK_FOR_NUL_IN_FORMAT_SPECIFIER
+#ifdef PKG_VSNPRINTF_CHECK_FOR_NUL_IN_FORMAT_SPECIFIER
 #define ADVANCE_IN_FORMAT_STRING(cptr_) do { (cptr_)++; if (!*(cptr_)) return; } while(0)
 #else
 #define ADVANCE_IN_FORMAT_STRING(cptr_) (cptr_)++
@@ -1061,7 +1061,7 @@ static inline void format_string_loop(output_gadget_t* output, const char* forma
 
     // evaluate length field
     switch (*format) {
-#ifdef PRINTF_SUPPORT_MSVC_STYLE_INTEGER_SPECIFIERS
+#ifdef PKG_VSNPRINTF_SUPPORT_MSVC_STYLE_INTEGER_SPECIFIERS
       case 'I' : {
         ADVANCE_IN_FORMAT_STRING(format);
         // Greedily parse for size in bits: 8, 16, 32 or 64
@@ -1161,7 +1161,7 @@ static inline void format_string_loop(output_gadget_t* output, const char* forma
           // A signed specifier: d, i or possibly I + bit size if enabled
 
           if (flags & FLAGS_LONG_LONG) {
-#if PRINTF_SUPPORT_LONG_LONG
+#ifdef PKG_VSNPRINTF_SUPPORT_LONG_LONG
             const long long value = va_arg(args, long long);
             print_integer(output, ABS_FOR_PRINTING(value), value < 0, base, precision, width, flags);
 #endif
@@ -1188,7 +1188,7 @@ static inline void format_string_loop(output_gadget_t* output, const char* forma
           flags &= ~(FLAGS_PLUS | FLAGS_SPACE);
 
           if (flags & FLAGS_LONG_LONG) {
-#if PRINTF_SUPPORT_LONG_LONG
+#ifdef PKG_VSNPRINTF_SUPPORT_LONG_LONG
             print_integer(output, (printf_unsigned_value_t) va_arg(args, unsigned long long), false, base, precision, width, flags);
 #endif
           }
@@ -1205,25 +1205,25 @@ static inline void format_string_loop(output_gadget_t* output, const char* forma
         }
         break;
       }
-#if PRINTF_SUPPORT_DECIMAL_SPECIFIERS
+#ifdef PKG_VSNPRINTF_SUPPORT_DECIMAL_SPECIFIERS
       case 'f' :
       case 'F' :
         if (*format == 'F') flags |= FLAGS_UPPERCASE;
-        print_floating_point(output, va_arg(args, double), precision, width, flags, PRINTF_PREFER_DECIMAL);
+        print_floating_point(output, va_arg(args, double), precision, width, flags, PKG_VSNPRINTF_PREFER_DECIMAL);
         format++;
         break;
 #endif
-#if PRINTF_SUPPORT_EXPONENTIAL_SPECIFIERS
+#ifdef PKG_VSNPRINTF_SUPPORT_EXPONENTIAL_SPECIFIERS
       case 'e':
       case 'E':
       case 'g':
       case 'G':
         if ((*format == 'g')||(*format == 'G')) flags |= FLAGS_ADAPT_EXP;
         if ((*format == 'E')||(*format == 'G')) flags |= FLAGS_UPPERCASE;
-        print_floating_point(output, va_arg(args, double), precision, width, flags, PRINTF_PREFER_EXPONENTIAL);
+        print_floating_point(output, va_arg(args, double), precision, width, flags, PKG_VSNPRINTF_PREFER_EXPONENTIAL);
         format++;
         break;
-#endif  // PRINTF_SUPPORT_EXPONENTIAL_SPECIFIERS
+#endif  // PKG_VSNPRINTF_SUPPORT_EXPONENTIAL_SPECIFIERS
       case 'c' : {
         printf_size_t l = 1U;
         // pre padding
@@ -1295,19 +1295,19 @@ static inline void format_string_loop(output_gadget_t* output, const char* forma
       // Many people prefer to disable support for %n, as it lets the caller
       // engineer a write to an arbitrary location, of a value the caller
       // effectively controls - which could be a security concern in some cases.
-#if PRINTF_SUPPORT_WRITEBACK_SPECIFIER
+#ifdef PKG_VSNPRINTF_SUPPORT_WRITEBACK_SPECIFIER
       case 'n' : {
         if       (flags & FLAGS_CHAR)      *(va_arg(args, char*))      = (char) output->pos;
         else if  (flags & FLAGS_SHORT)     *(va_arg(args, short*))     = (short) output->pos;
         else if  (flags & FLAGS_LONG)      *(va_arg(args, long*))      = (long) output->pos;
-#if PRINTF_SUPPORT_LONG_LONG
+#ifdef PKG_VSNPRINTF_SUPPORT_LONG_LONG
         else if  (flags & FLAGS_LONG_LONG) *(va_arg(args, long long*)) = (long long int) output->pos;
-#endif // PRINTF_SUPPORT_LONG_LONG
+#endif // PKG_VSNPRINTF_SUPPORT_LONG_LONG
         else                               *(va_arg(args, int*))       = (int) output->pos;
         format++;
         break;
       }
-#endif // PRINTF_SUPPORT_WRITEBACK_SPECIFIER
+#endif // PKG_VSNPRINTF_SUPPORT_WRITEBACK_SPECIFIER
 
       default :
         putchar_via_gadget(output, *format);
