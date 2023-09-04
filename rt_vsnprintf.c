@@ -55,74 +55,12 @@
 #include <rtconfig.h>
 #include <rtdef.h>
 
-// 'ntoa' conversion buffer size, this must be big enough to hold one converted
-// numeric number including padded zeros (dynamically created on stack)
-// #ifndef PKG_VSNPRINTF_INTEGER_BUFFER_SIZE
-// #define PKG_VSNPRINTF_INTEGER_BUFFER_SIZE    32
-// #endif
-
-// size of the fixed (on-stack) buffer for printing individual decimal numbers.
-// this must be big enough to hold one converted floating-point value including
-// padded zeros.
-// #ifndef PKG_VSNPRINTF_DECIMAL_BUFFER_SIZE
-// #define PKG_VSNPRINTF_DECIMAL_BUFFER_SIZE    32
-// #endif
-
-// Support for the decimal notation floating point conversion specifiers (%f, %F)
-// #ifndef PKG_VSNPRINTF_SUPPORT_DECIMAL_SPECIFIERS
-// #define PKG_VSNPRINTF_SUPPORT_DECIMAL_SPECIFIERS
-// #endif
-
-// Support for the exponential notation floating point conversion specifiers (%e, %g, %E, %G)
-// #ifndef PKG_VSNPRINTF_SUPPORT_EXPONENTIAL_SPECIFIERS
-// #define PKG_VSNPRINTF_SUPPORT_EXPONENTIAL_SPECIFIERS
-// #endif
-
-// Support for the length write-back specifier (%n)
-// #ifndef PKG_VSNPRINTF_SUPPORT_WRITEBACK_SPECIFIER
-// #define PKG_VSNPRINTF_SUPPORT_WRITEBACK_SPECIFIER
-// #endif
-
-// Default precision for the floating point conversion specifiers (the C standard sets this at 6)
-// #ifndef PKG_VSNPRINTF_DEFAULT_FLOAT_PRECISION
-// #define PKG_VSNPRINTF_DEFAULT_FLOAT_PRECISION  6
-// #endif
-
-// According to the C languages standard, printf() and related functions must be able to print any
-// integral number in floating-point notation, regardless of length, when using the %f specifier -
-// possibly hundreds of characters, potentially overflowing your buffers. In this implementation,
-// all values beyond this threshold are switched to exponential notation.
-// #ifndef PKG_VSNPRINTF_MAX_INTEGRAL_DIGITS_FOR_DECIMAL
-// #define PKG_VSNPRINTF_MAX_INTEGRAL_DIGITS_FOR_DECIMAL 9
-// #endif
-
-// Support for the long long integral types (with the ll, z and t length modifiers for specifiers
-// %d,%i,%o,%x,%X,%u, and with the %p specifier). Note: 'L' (long double) is not supported.
-// #ifndef PKG_VSNPRINTF_SUPPORT_LONG_LONG
-// #define PKG_VSNPRINTF_SUPPORT_LONG_LONG
-// #endif
-
-// The number of terms in a Taylor series expansion of log_10(x) to
-// use for approximation - including the power-zero term (i.e. the
-// value at the point of expansion).
-// #ifndef PKG_VSNPRINTF_LOG10_TAYLOR_TERMS
-// #define PKG_VSNPRINTF_LOG10_TAYLOR_TERMS 4
-// #endif
-
 #if PKG_VSNPRINTF_LOG10_TAYLOR_TERMS <= 1
 #error "At least one non-constant Taylor expansion is necessary for the log10() calculation"
 #endif
 
-// Be extra-safe, and don't assume format specifiers are completed correctly
-// before the format string end.
-// #ifndef PKG_VSNPRINTF_CHECK_FOR_NUL_IN_FORMAT_SPECIFIER
-// #define PKG_VSNPRINTF_CHECK_FOR_NUL_IN_FORMAT_SPECIFIER
-// #endif
-
-#define PKG_VSNPRINTF_PREFER_DECIMAL     false
-#define PKG_VSNPRINTF_PREFER_EXPONENTIAL true
-
-///////////////////////////////////////////////////////////////////////////////
+#define PRINTF_PREFER_DECIMAL     false
+#define PRINTF_PREFER_EXPONENTIAL true
 
 // The following will convert the number-of-digits into an exponential-notation literal
 #define PRINTF_CONCATENATE(s1, s2) s1##s2
@@ -152,7 +90,6 @@
 #ifdef PKG_VSNPRINTF_SUPPORT_MSVC_STYLE_INTEGER_SPECIFIERS
 
 #define FLAGS_INT8 FLAGS_CHAR
-
 
 #if   (SHRT_MAX   == 32767LL)
 #define FLAGS_INT16       FLAGS_SHORT
@@ -1209,7 +1146,7 @@ static inline void format_string_loop(output_gadget_t* output, const char* forma
       case 'f' :
       case 'F' :
         if (*format == 'F') flags |= FLAGS_UPPERCASE;
-        print_floating_point(output, va_arg(args, double), precision, width, flags, PKG_VSNPRINTF_PREFER_DECIMAL);
+        print_floating_point(output, va_arg(args, double), precision, width, flags, PRINTF_PREFER_DECIMAL);
         format++;
         break;
 #endif
@@ -1220,7 +1157,7 @@ static inline void format_string_loop(output_gadget_t* output, const char* forma
       case 'G':
         if ((*format == 'g')||(*format == 'G')) flags |= FLAGS_ADAPT_EXP;
         if ((*format == 'E')||(*format == 'G')) flags |= FLAGS_UPPERCASE;
-        print_floating_point(output, va_arg(args, double), precision, width, flags, PKG_VSNPRINTF_PREFER_EXPONENTIAL);
+        print_floating_point(output, va_arg(args, double), precision, width, flags, PRINTF_PREFER_EXPONENTIAL);
         format++;
         break;
 #endif  // PKG_VSNPRINTF_SUPPORT_EXPONENTIAL_SPECIFIERS
