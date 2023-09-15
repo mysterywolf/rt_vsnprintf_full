@@ -55,9 +55,73 @@
 #include <rtconfig.h>
 #include <rtdef.h>
 
+#ifndef RT_VER_NUM /* Doesn't use menuconfig */
+// 'ntoa' conversion buffer size, this must be big enough to hold one converted
+// numeric number including padded zeros (dynamically created on stack)
+#ifndef PKG_VSNPRINTF_INTEGER_BUFFER_SIZE
+#define PKG_VSNPRINTF_INTEGER_BUFFER_SIZE    32
+#endif
+
+// size of the fixed (on-stack) buffer for printing individual decimal numbers.
+// this must be big enough to hold one converted floating-point value including
+// padded zeros.
+#ifndef PKG_VSNPRINTF_DECIMAL_BUFFER_SIZE
+#define PKG_VSNPRINTF_DECIMAL_BUFFER_SIZE    32
+#endif
+
+// Support for the decimal notation floating point conversion specifiers (%f, %F)
+#ifndef PKG_VSNPRINTF_SUPPORT_DECIMAL_SPECIFIERS
+#define PKG_VSNPRINTF_SUPPORT_DECIMAL_SPECIFIERS
+#endif
+
+// Support for the exponential notation floating point conversion specifiers (%e, %g, %E, %G)
+#ifndef PKG_VSNPRINTF_SUPPORT_EXPONENTIAL_SPECIFIERS
+#define PKG_VSNPRINTF_SUPPORT_EXPONENTIAL_SPECIFIERS
+#endif
+
+// Support for the length write-back specifier (%n)
+#ifndef PKG_VSNPRINTF_SUPPORT_WRITEBACK_SPECIFIER
+#define PKG_VSNPRINTF_SUPPORT_WRITEBACK_SPECIFIER
+#endif
+
+// Default precision for the floating point conversion specifiers (the C standard sets this at 6)
+#ifndef PKG_VSNPRINTF_DEFAULT_FLOAT_PRECISION
+#define PKG_VSNPRINTF_DEFAULT_FLOAT_PRECISION  6
+#endif
+
+// According to the C languages standard, printf() and related functions must be able to print any
+// integral number in floating-point notation, regardless of length, when using the %f specifier -
+// possibly hundreds of characters, potentially overflowing your buffers. In this implementation,
+// all values beyond this threshold are switched to exponential notation.
+#ifndef PKG_VSNPRINTF_MAX_INTEGRAL_DIGITS_FOR_DECIMAL
+#define PKG_VSNPRINTF_MAX_INTEGRAL_DIGITS_FOR_DECIMAL 9
+#endif
+
+// Support for the long long integral types (with the ll, z and t length modifiers for specifiers
+// %d,%i,%o,%x,%X,%u, and with the %p specifier). Note: 'L' (long double) is not supported.
+#ifndef PKG_VSNPRINTF_SUPPORT_LONG_LONG
+#define PKG_VSNPRINTF_SUPPORT_LONG_LONG
+#endif
+
+// The number of terms in a Taylor series expansion of log_10(x) to
+// use for approximation - including the power-zero term (i.e. the
+// value at the point of expansion).
+#ifndef PKG_VSNPRINTF_LOG10_TAYLOR_TERMS
+#define PKG_VSNPRINTF_LOG10_TAYLOR_TERMS 4
+#endif
+
+// Be extra-safe, and don't assume format specifiers are completed correctly
+// before the format string end.
+#ifndef PKG_VSNPRINTF_CHECK_FOR_NUL_IN_FORMAT_SPECIFIER
+#define PKG_VSNPRINTF_CHECK_FOR_NUL_IN_FORMAT_SPECIFIER
+#endif
+#endif /* RT_VER_NUM */
+
 #if PKG_VSNPRINTF_LOG10_TAYLOR_TERMS <= 1
 #error "At least one non-constant Taylor expansion is necessary for the log10() calculation"
 #endif
+
+///////////////////////////////////////////////////////////////////////////////
 
 #define PRINTF_PREFER_DECIMAL     false
 #define PRINTF_PREFER_EXPONENTIAL true
