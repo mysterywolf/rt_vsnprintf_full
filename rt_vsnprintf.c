@@ -54,6 +54,7 @@
 
 #include <rtconfig.h>
 #include <rtdef.h>
+#include <rtthread.h>
 
 #ifndef RT_VER_NUM /* Doesn't use menuconfig */
 // 'ntoa' conversion buffer size, this must be big enough to hold one converted
