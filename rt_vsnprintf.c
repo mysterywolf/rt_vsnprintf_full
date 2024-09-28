@@ -245,7 +245,7 @@ typedef uint64_t double_uint_t;
 #define DOUBLE_EXPONENT_MASK 0x7FFU
 #define DOUBLE_BASE_EXPONENT 1023
 #define DOUBLE_MAX_SUBNORMAL_EXPONENT_OF_10 -308
-#define DOUBLE_MAX_SUBNORMAL_POWER_OF_10 1e-308
+#define DOUBLE_MAX_SUBNORMAL_POWER_OF_10 ((double)1e-308L)
 
 #else
 #error "Unsupported double type configuration"
